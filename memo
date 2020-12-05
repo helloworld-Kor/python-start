@@ -1,0 +1,27 @@
+git 명령어 모음 https://github.com/ 사이트
+git init   :::   git 시작명령어
+git status   :::   변경,삭제,신규 된 파일 색인
+git add -A   :::   전체 파일을 추가
+git add (파일이름)   :::   특정 파일을 추가
+git commit -m (주석)   :::   추가된 파일을 커밋 침
+git log   :::   커밋친 파일 history 
+git reset (복구할커밋번호6자리) --hard    :::   과감하게 복구 미래(삭제)
+git revert (취소할커밋번호6자리)     ::: 소심하게 복구
+git branch  :::   현재 브랜치 상태와 ID가 뭐있는지 확인 
+git branch (브렌치 ID )   :::   가지치기(현시점에서 두갈래로 분기)
+git checkout (브렌치 ID ) :::   해당 브런치로 이동
+git checkout -b (브랜치ID)   :::  브랜치를 만들고 해당 프렌치로 이동
+git checkout -b (브랜치ID로만듬) (원격명)/(해당브렌치)   ::: 깃허브에서 해당 브렌치 가져오기
+
+git merge (병합할ID)   ::: 해당하는 브런치랑 병합
+git log --graph --all --decorate   ::: 그래프로 병합된거 확인
+git branch -D (브렌치ID)   :::   해당 브런치 삭제
+git remote   :::   현 폴더의 원격 레파지토리를 확인하는 명령
+git fetch 한 후에 git status 누르면 최신 커밋파일인지 확인 가능
+위애 실행 후 만약 다운받아야할 항목이 있다면
+git pull (원격명ex:origin) (브랜치명ex:master) 을 하면 최신파일로 다운 
+git push (원격명) (브랜치명) 해당 브랜치명을 올린다
+
+git config --global user.name [이름]
+
+git config --global user.mail [메일 주소]
