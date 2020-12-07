@@ -6,11 +6,12 @@ import re
 def magnetSearch(keyword, startpage):
     start = ((startpage-1) * 10) + 10
     keyword = re.sub(" ", "+", keyword)  # &od=1
+    result = ""
     for i in range(0, start, 10):
-        print("{}*********{}페이지입니다.".format(i, int(i/10+1)))
+        # print("{}*********{}페이지입니다.".format(i, int(i/10+1)))
         url = "https://www.google.com/search?q={}+magnet:%3Fxt%3D&start={}".format(
             keyword, i)
-        print(url)
+        # print(url)
         header = {
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36"}
         r = requests.get(url, headers=header)
@@ -34,11 +35,14 @@ def magnetSearch(keyword, startpage):
                 except:
                     pass
         for map in mapping:
-            print(map)
+            result += str(map)
+            result += "\n"
+    return result
 
 
-keyword = input("마그넷 검색어를 입력하시오 >>>>>>>>")
-startpage = int(input("페이지 수를 정하세요 >>>>>>>>"))
-magnetSearch(keyword, startpage)
+if __name__ == "__main__":
+    keyword = input("마그넷 검색어를 입력하시오 >>>>>>>>")
+    startpage = int(input("페이지 수를 정하세요 >>>>>>>>"))
+    print(magnetSearch(keyword, startpage))
 
 # #print("***************{}번째 페이지***********".format(i+1))

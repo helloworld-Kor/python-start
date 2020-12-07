@@ -2,9 +2,25 @@ import telepot
 import logging
 import module
 import os
+from telepot.loop import MessageLoop
+from telepot.namedtuple import InlineKeyboardMarkup as MU
+from telepot.namedtuple import InlineKeyboardButton as BT
+import pprint
+# logging.basicConfig(level=logging.DEBUG)
+# logger = logging.getLogger(__name__)
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+# {'chat': {'first_name': 'Kor',
+#           'id': 1440556547,
+#           'last_name': 'HelloWorld',
+#           'type': 'private'},
+#  'date': 1607358959,
+#  'from': {'first_name': 'Kor',
+#           'id': 1440556547,
+#           'is_bot': False,
+#           'language_code': 'ko',
+#           'last_name': 'HelloWorld'},
+#  'message_id': 87,
+#  'text': '가나다'}
 
 TELEGRAM_TOKEN = "1480467875:AAFQsa0P93WmXfQ1airEjmXcSexzmrZHc-E"
 
@@ -12,7 +28,7 @@ TELEGRAM_TOKEN = "1480467875:AAFQsa0P93WmXfQ1airEjmXcSexzmrZHc-E"
 def handler(msg):
     content_type, chat_Type, chat_id, msg_date, msg_id = telepot.glance(
         msg, long=True)
-
+    # pprint.pprint(msg)
     if content_type == "text":
         str_message = msg["text"]
         if str_message[0:1] == "/":
@@ -27,6 +43,10 @@ def handler(msg):
                 else:
                     filelist = module.get_dir_list(filepath)
                     bot.sendMessage(chat_id, filelist)
+            elif command == '/start':
+                # mu = module.btn_shw(msg, bot, chat_id)
+                MessageLoop(bot, {'chat': module.btn_shw(
+                    msg, bot, chat_id), 'callback_query': module.qry_ans(msg, bot, chat_id)})
             elif command == "/weather" or command == "/날씨":
                 w = " ".join(args)
                 weather = module.get_weather(w)
@@ -35,7 +55,7 @@ def handler(msg):
                 w = " ".join(args)
                 output = module.money_translate(w)
                 bot.sendMessage(chat_id, output)
-            elif command[0:4] == "/get":
+            elif command[0: 4] == "/get":
                 filepath = " ".join(args)
                 if os.path.exists(filepath):
                     try:

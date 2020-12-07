@@ -1,6 +1,10 @@
+from telepot.namedtuple import InlineKeyboardMarkup as MU
+from telepot.namedtuple import InlineKeyboardButton as BT
 import os
 import requests
 from bs4 import BeautifulSoup
+import pprint
+
 
 def get_dir_list(dir):
     str_list = ""
@@ -15,6 +19,7 @@ def get_dir_list(dir):
             str_list += "\n"
     str_list.strip()
     return str_list
+
 
 def get_weather(where):
     weather = ""
@@ -36,6 +41,7 @@ def get_weather(where):
             weather = "{}℃\r\n{}\r\n{}".format(temperature, indicator, txt)
     return weather
 
+
 MONEY_NAME = {
     "유로": "유럽연합 EUR",
     "엔": "일본 JPY (100엔)",
@@ -45,6 +51,7 @@ MONEY_NAME = {
     "파운드": "영국 GBP",
     "달라": "미국 USD",
 }
+
 
 def get_exchange_info():
     EXCHANGE_LIST = {}
@@ -59,6 +66,7 @@ def get_exchange_info():
         EXCHANGE_LIST[name] = value
     return EXCHANGE_LIST
 
+
 def money_translate(keyword):
     EXCHANGE_LIST = get_exchange_info()
     keywords = []
@@ -67,7 +75,7 @@ def money_translate(keyword):
             keywords.append(keyword[0:keyword.find(m)].strip())
             keywords.append(m)
             break
-    
+
     if keywords[1] in MONEY_NAME:
         country = MONEY_NAME[keywords[1]]
 
@@ -75,10 +83,30 @@ def money_translate(keyword):
             money = float(EXCHANGE_LIST[country])
             if country == "일본 JPY (100엔)":
                 money /= 100
-            
+
             money = format(round(float(money) * float(keywords[0]), 3), ",")
             output = "{} 원".format(money)
             return output
 
-if __name__ == "__main__":
-    print(money_translate("150홍콩달라"))
+
+def btn_shw(msg, bot, chat_id):
+    btn1 = BT(text="1.hello", callback_data="1")
+    btn2 = BT(text="2.bye", callback_data="2")
+    btn3 = BT(text="3.bye", callback_data="3")
+    btn4 = BT(text="4.bye", callback_data="4")
+    mu = MU(inline_keyboard=[[btn1], [btn2], [btn3], [btn4]])
+    return bot.sendMessage(chat_id, "선택하세요", reply_markup=mu)
+
+
+def qry_ans(msg, bot, chat_id):
+
+    pprint.pprint(msg)
+    qry_id = chat_id
+
+    # qry_data = msg['data']
+
+    bot.answerCallbackQuery(qry_id, text=qry_id)
+
+
+# if __name__ == "__main__":
+#     # btn_shw()
