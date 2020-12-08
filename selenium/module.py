@@ -89,16 +89,18 @@ def money_translate(keyword):
             return output
 
 
-def btn_shw(msg, bot, chat_id):
-    btn1 = BT(text="1.hello", callback_data="1")
-    btn2 = BT(text="2.bye", callback_data="2")
-    btn3 = BT(text="3.bye", callback_data="3")
-    btn4 = BT(text="4.bye", callback_data="4")
-    mu = MU(inline_keyboard=[[btn1], [btn2], [btn3], [btn4]])
-    return bot.sendMessage(chat_id, "선택하세요", reply_markup=mu)
+def btn_shw(msg):
+    content_type, chat_type, chat_id = telepot.glance(msg)
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Press me', callback_data='press')],
+        [InlineKeyboardButton(text='Press me', callback_data='press')],
+    ])
+
+    return bot.sendMessage(chat_id, 'Use inline keyboard', reply_markup=keyboard)
 
 
-def qry_ans(msg, bot, chat_id):
+def qry_ans(msg):
 
     pprint.pprint(msg)
     qry_id = chat_id
