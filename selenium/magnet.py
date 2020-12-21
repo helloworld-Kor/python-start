@@ -43,6 +43,8 @@ def magnetSearch(keyword, startpage):
 if __name__ == "__main__":
     keyword = input("마그넷 검색어를 입력하시오 >>>>>>>>")
     startpage = int(input("페이지 수를 정하세요 >>>>>>>>"))
-    print(magnetSearch(keyword, startpage))
+    result = magnetSearch(keyword, startpage)
+    print(result)
+
 
 # #print("***************{}번째 페이지***********".format(i+1))

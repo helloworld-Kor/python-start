@@ -16,23 +16,6 @@ updater = Updater(token=BOT_TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
 
-# def handler(bot, update):
-#     text = update.message.text
-#     chat_id = update.message.chat_id
-
-#     if '모해' in text:
-#         bot.send_message(chat_id=chat_id, text='오빠 생각 ㅎㅎ')
-#     elif '아잉' in text:
-#         bot.send_message(chat_id=chat_id, text=emojize(
-#             '아잉:heart_eyes:', use_aliases=True))
-#     elif '몇시에' in text:
-#         bot.send_message(chat_id=chat_id, text='7시에 보자')
-#     elif '사진' in text:
-#         bot.send_photo(chat_id=chat_id, photo=open('img/mj.jpg', 'rb'))
-#     else:
-#         bot.send_message(chat_id=chat_id, text='몰라')
-
-
 def cmd_task_buttons(update, context):
     task_buttons = [[
         InlineKeyboardButton('1.네이버 뉴스', callback_data=1), InlineKeyboardButton(
@@ -51,11 +34,9 @@ def cmd_task_buttons(update, context):
 def cb_button(update, context):
     query = update.callback_query
     data = query.data
-    # print("@@@@@@@@@@@@@"*5)
-    # json.dumps(book)
 
     if '작업' in query.message.text:
-        print('작업@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        # print('작업@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         context.bot.send_chat_action(
             chat_id=update.effective_user.id, action=ChatAction.TYPING
         )
@@ -79,17 +60,24 @@ def cb_button(update, context):
             elif data == '2':
                 crawl_zigbang(context)
 
-            context.bot.send_message(
-                chat_id=update.effective_chat.id, text='[{}] 작업을 완료하였습니다.'.format(
-                    data)
-            )
     elif '직방' in query.message.text:
-        print('직방@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-        print(data)
+        result = upbit.zipbangFinal(const_zipbang, int(data))
+        cnt = 0
+        for i in result:
+            cnt += 1
+            context.bot.send_message(
+                chat_id=update.effective_chat.id, text='{}. {}'.format(cnt, i))
+    context.bot.send_message(
+        chat_id=update.effective_chat.id, text='[{}] 작업을 완료하였습니다.'.format(
+            data)
+    )
 
 
 def zigbang(update, context):
     task_buttons = []
+
+    global const_zipbang
+    const_zipbang = str(context.args[0])
     zigbangresult = upbit.zipbang(str(context.args[0]))
     for i in range(len(zigbangresult)):
         line = []
@@ -102,31 +90,51 @@ def zigbang(update, context):
 
     context.bot.send_message(
         chat_id=update.message.chat_id, text='직방', reply_markup=reply_markup)
-    # context.bot.send_message(chat_id=update.effective_chat.id,
-    #                          text='[{}] 작업을 완료하였습니다.'.format())
+    # context.bot.send_message(
+    #     chat_id=update.effective_chat.id, text='[{}] 작업을 완료하였습니다.'.format())
 
 
-def crawl_navernews():
-    time.sleep(5)
-    print('네이버에서 뉴스를 수집했다.')
+def magnetSearch(update, context):
+    # task_buttons = []
+    # global const_magnet
+    # magnet_zipbang = str(context.args[0])
+    magnetresult = upbit.magnetSearch(str(context.args[0]))
+    context.bot.send_message(
+        chat_id=update.effective_chat.id, text='{}'.format(magnetresult))
+    context.bot.send_message(
+        chat_id=update.effective_chat.id, text=' 작업을 완료하였습니다.')
+
+
+def jungoSearch(update, context):
+    # task_buttons = []
+    # global const_magnet
+    # magnet_zipbang = str(context.args[0])
+    jungoresult = upbit.junggo(str(context.args[0]))
+    cnt = 0
+    for i in jungoresult:
+        cnt += 1
+        context.bot.send_message(
+            chat_id=update.effective_chat.id, text='{}. {}'.format(cnt, i))
+    context.bot.send_message(
+        chat_id=update.effective_chat.id, text=' 작업을 완료하였습니다.')
 
 
 def crawl_zigbang(context):
     time.sleep(5)
-    print(context)
 
 
-# echo_handler = MessageHandler(Filters.text, handler)
 task_buttons_handler = CommandHandler('tasks', cmd_task_buttons)
 zigbang_handler = CommandHandler('zigbang', zigbang)
+magnet_handler = CommandHandler('magnet', magnetSearch)
+jungo_handler = CommandHandler('jungo', jungoSearch)
 button_callback_handler = CallbackQueryHandler(cb_button)
-# zipbang_callback_handler = CallbackQueryHandler(zipbang)
+
 
 dispatcher.add_handler(task_buttons_handler)
 dispatcher.add_handler(button_callback_handler)
 dispatcher.add_handler(zigbang_handler)
-# dispatcher.add_handler(zipbang_callback_handler)
-# dispatcher.add_handler(echo_handler)
+dispatcher.add_handler(magnet_handler)
+dispatcher.add_handler(jungo_handler)
 
 
 updater.start_polling()
