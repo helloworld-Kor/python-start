@@ -11,7 +11,7 @@ from emoji import emojize
 import pprint
 import json
 BOT_TOKEN = '1480467875:AAFQsa0P93WmXfQ1airEjmXcSexzmrZHc-E'
-
+# https://api.telegram.org/bot1480467875:AAFQsa0P93WmXfQ1airEjmXcSexzmrZHc-E/sendMessage?chat_id=1440556547%20&text=잘가냐?
 updater = Updater(token=BOT_TOKEN, use_context=True)
 dispatcher = updater.dispatcher
 
@@ -34,7 +34,7 @@ def cmd_task_buttons(update, context):
 def cb_button(update, context):
     query = update.callback_query
     data = query.data
-
+    print(query.message.chat_id)
     if '작업' in query.message.text:
         # print('작업@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         context.bot.send_chat_action(
@@ -54,7 +54,7 @@ def cb_button(update, context):
                 # results = []
                 results = upbit.upbit()
                 for result in results:
-                    # print(result)
+                    print(result)
                     context.bot.send_message(
                         chat_id=update.effective_chat.id, text='{}'.format(result))
             elif data == '2':
@@ -90,14 +90,9 @@ def zigbang(update, context):
 
     context.bot.send_message(
         chat_id=update.message.chat_id, text='직방', reply_markup=reply_markup)
-    # context.bot.send_message(
-    #     chat_id=update.effective_chat.id, text='[{}] 작업을 완료하였습니다.'.format())
 
 
 def magnetSearch(update, context):
-    # task_buttons = []
-    # global const_magnet
-    # magnet_zipbang = str(context.args[0])
     magnetresult = upbit.magnetSearch(str(context.args[0]))
     context.bot.send_message(
         chat_id=update.effective_chat.id, text='{}'.format(magnetresult))
@@ -106,9 +101,6 @@ def magnetSearch(update, context):
 
 
 def jungoSearch(update, context):
-    # task_buttons = []
-    # global const_magnet
-    # magnet_zipbang = str(context.args[0])
     jungoresult = upbit.junggo(str(context.args[0]))
     cnt = 0
     for i in jungoresult:

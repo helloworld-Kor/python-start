@@ -75,6 +75,7 @@ def zipbangFinal(context, index):
         bang_lists = []
         for filtered in filtereds:
             if filtered.get("id") == 23300:
+                continue
             else:
                 name = filtered.get("name") + filtered.get("real_type")
                 key = filtered.get("id")
