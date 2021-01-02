@@ -25,3 +25,10 @@ git push (원격명) (브랜치명) 해당 브랜치명을 올린다
 git config --global user.name [이름]
 
 git config --global user.mail [메일 주소]
+
+pip freeze 지금 컴퓨터에 설치된 라이브러리 목록 보기
+pip freeze > 라이브러리목록.txt 를 명령어로 치면 해당 파일이 생성
+그 이후에 pip install -r 라이브러리목록.txt 을 치면 해당 목록 그대로 라이브러리 생성
+
+pip install pyinstaller 파이썬을 exe파일로 만듬
+pyinstaller --onefile [파일명]
